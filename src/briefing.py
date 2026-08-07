@@ -31,7 +31,8 @@ def build_briefing_text() -> str:
     date_str = snaps[0]["date"] if snaps else ""
 
     lines = [
-        f"📊 <b>오늘의 아침 브리핑</b> ({date_str} 낮 기준)",
+        "📊 <b>오늘의 아침 브리핑</b>",
+        f"{date_str} 낮 기준", 
         "",
         f"😨 CNN 탐욕지수: <b>{fg['score']}점 ({fg['rating_kr']})</b>",
         "",
