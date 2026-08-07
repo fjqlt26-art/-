@@ -1,0 +1,39 @@
+name: Realtime Alert Check
+
+on:
+  schedule:
+    # 미국 정규장(9:30-16:00 ET)을 서머타임 여부와 상관없이 넉넉히 덮도록
+    # UTC 13:00~21:59 사이 15분 간격으로 실행 (KST 기준 대략 22:00~다음날 07:00)
+    # 실제 개장일/개장시간이 아니면 스크립트 내부에서 즉시 종료합니다.
+    - cron: "*/15 13-21 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  realtime-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run realtime check
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python -m src.realtime_check
+
+      - name: Commit updated state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add state.json
+          git diff --staged --quiet || git commit -m "chore: update alert state [skip ci]"
+          git push
