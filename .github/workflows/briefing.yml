@@ -1,0 +1,29 @@
+name: Morning Briefing
+
+on:
+  schedule:
+    # 매일 KST 09:00 = UTC 00:00
+    # 미국 증시 휴장일 여부는 스크립트 내부(is_us_trading_day)에서 판별하여
+    # 휴장일이면 자동으로 메시지를 보내지 않으므로 매일 실행해도 안전합니다.
+    - cron: "0 0 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  briefing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run briefing
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python -m src.briefing
