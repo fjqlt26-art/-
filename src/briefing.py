@@ -32,7 +32,7 @@ def build_briefing_text() -> str:
 
     lines = [
         "📊 <b>오늘의 아침 브리핑</b>",
-        f"📅 {date_str} 기준 (전일 종가)",
+        f" {date_str} 기준 (전일 종가)",
         "",
         f"😨 CNN 탐욕지수: <b>{fg['score']}점 ({fg['rating_kr']})</b>",
         "",
@@ -40,8 +40,8 @@ def build_briefing_text() -> str:
 
     for snap in snaps:
         lines.append(f"<b>[{snap['ticker']}]</b> 종가 ${snap['close']:.2f}")
-        lines.append(f"  RSI: {snap['rsi']:.1f}")
-        lines.append("  이평선:")
+        lines.append(f"  - RSI: {snap['rsi']:.1f}")
+        lines.append("  - 이평선:")
         lines.extend(_format_ma_lines(snap["ma_info"]))
         lines.append("")
 
