@@ -1,9 +1,14 @@
-"""매일 오전 9시(KST) 브리핑. 미국 증시 휴장일에는 발송하지 않음."""
+"""매일 오전 9시(KST) 브리핑. 주말(KST 기준)에는 발송하지 않음."""
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
 from src.config import MA_PERIODS, TICKERS
 from src.data_fetch import get_ticker_snapshot
 from src.fear_greed import get_fear_greed
 from src.market_calendar import is_kst_weekday
 from src.telegram_notify import send_telegram_message
+
+KST = ZoneInfo("Asia/Seoul")
 
 
 def _format_ma_lines(ma_info: dict) -> list:
@@ -17,22 +22,25 @@ def _format_ma_lines(ma_info: dict) -> list:
         sign = "+" if info["gap_pct"] >= 0 else ""
         gap_str = f"{sign}{info['gap_pct']:.1f}%"
         if info["position"] == "아래":
-            # 이평선 아래(눌림목/매수 관심 구간)일 때 강조 표시
             lines.append(f"    🟢 <b>{period}일선 아래</b> ({gap_str})")
         else:
             lines.append(f"    {period}일선 위 ({gap_str})")
     return lines
 
 
+WEEKDAY_KR = ["월", "화", "수", "목", "금", "토", "일"]
+
+
 def build_briefing_text() -> str:
     fg = get_fear_greed()
 
     snaps = [get_ticker_snapshot(ticker) for ticker in TICKERS]
-    date_str = snaps[0]["date"] if snaps else ""
 
+    now_kst = datetime.now(KST)
+    title_date = now_kst.strftime("%y.%m.%d.")
+    weekday_kr = WEEKDAY_KR[now_kst.weekday()]
     lines = [
-        "📊 <b>오늘의 아침 브리핑</b>",
-        f"📅 {date_str} 낮 기준",
+        f"📊 <b>{title_date}({weekday_kr}) 아침 브리핑</b>",
         "",
         f"😨 CNN 탐욕지수: <b>{fg['score']}점 ({fg['rating_kr']})</b>",
         "",
@@ -40,8 +48,8 @@ def build_briefing_text() -> str:
 
     for snap in snaps:
         lines.append(f"<b>[{snap['ticker']}]</b> 종가 ${snap['close']:.2f}")
-        lines.append(f"  - RSI: {snap['rsi']:.1f}")
-        lines.append("  - 이평선:")
+        lines.append(f"  RSI: {snap['rsi']:.1f}")
+        lines.append("  이평선:")
         lines.extend(_format_ma_lines(snap["ma_info"]))
         lines.append("")
 
