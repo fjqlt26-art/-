@@ -6,7 +6,7 @@ TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
 # ---- 추적 종목 ----
-TICKERS = ["SPY", "QQQ", "SOXQ", "SMH", "GOOGL"]
+TICKERS = ["SPY", "QQQ", "SOXQ", "SMH", "GOOGL", "GDX", "GLD"]
 
 # ---- 지표 설정 ----
 RSI_PERIOD = 14
