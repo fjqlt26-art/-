@@ -5,6 +5,22 @@ import pandas_market_calendars as mcal
 
 NYSE = mcal.get_calendar("NYSE")
 ET = ZoneInfo("America/New_York")
+KST = ZoneInfo("Asia/Seoul")
+
+
+def is_kst_weekday(date=None) -> bool:
+    """오늘(한국시간 기준)이 평일(월~금)인지 확인.
+
+    브리핑은 한국시간 09:00에 발송되는데, 이 시각은 미국 동부시간으로는
+    '전날 저녁'에 해당한다. 따라서 미국 동부시간 날짜로 개장일을 체크하면
+    (예: 월요일 09:00 KST = 일요일 저녁 ET) 정상적인 평일 브리핑까지
+    휴장일로 오판하는 문제가 생긴다. 브리핑은 최신 종가를 그대로 보여주면
+    되므로(공휴일이면 yfinance가 자동으로 직전 거래일 데이터를 반환),
+    한국시간 기준 평일 여부만 확인한다.
+    """
+    if date is None:
+        date = datetime.now(KST).date()
+    return date.weekday() < 5  # 0=월요일 ... 4=금요일, 5=토, 6=일
 
 
 def is_us_trading_day(date=None) -> bool:
