@@ -2,7 +2,7 @@
 from src.config import MA_PERIODS, TICKERS
 from src.data_fetch import get_ticker_snapshot
 from src.fear_greed import get_fear_greed
-from src.market_calendar import is_us_trading_day
+from src.market_calendar import is_kst_weekday
 from src.telegram_notify import send_telegram_message
 
 
@@ -49,8 +49,8 @@ def build_briefing_text() -> str:
 
 
 def run_briefing():
-    if not is_us_trading_day():
-        print("오늘은 미국 증시 휴장일입니다. 브리핑을 건너뜁니다.")
+    if not is_kst_weekday():
+        print("주말입니다. 브리핑을 건너뜁니다.")
         return
     text = build_briefing_text()
     send_telegram_message(text)
