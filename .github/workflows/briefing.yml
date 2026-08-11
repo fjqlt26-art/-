@@ -5,7 +5,7 @@ on:
     # 매일 KST 09:00 = UTC 00:00
     # 미국 증시 휴장일 여부는 스크립트 내부(is_us_trading_day)에서 판별하여
     # 휴장일이면 자동으로 메시지를 보내지 않으므로 매일 실행해도 안전합니다.
-    - cron: "0 0 * * *"
+    - cron: "5 0 * * *"
   workflow_dispatch: {}
 
 jobs:
