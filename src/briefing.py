@@ -2,17 +2,17 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+from src.chart import generate_ma_chart
 from src.config import MA_PERIODS, TICKERS
 from src.data_fetch import get_ticker_snapshot
 from src.fear_greed import get_fear_greed
 from src.market_calendar import is_kst_weekday
-from src.telegram_notify import send_telegram_message
+from src.telegram_notify import send_telegram_message, send_telegram_photo_group
 
 KST = ZoneInfo("Asia/Seoul")
 
 
 def _format_ma_lines(ma_info: dict) -> list:
-    """이평선을 종목별로 줄바꿈해서 표시. 이평선 아래로 내려온 경우 강조."""
     lines = []
     for period in MA_PERIODS:
         info = ma_info[period]
@@ -60,9 +60,24 @@ def run_briefing():
     if not is_kst_weekday():
         print("주말입니다. 브리핑을 건너뜁니다.")
         return
+
     text = build_briefing_text()
     send_telegram_message(text)
-    print("브리핑 발송 완료")
+    print("브리핑 텍스트 발송 완료")
+
+    photos = []
+    for ticker in TICKERS:
+        try:
+            img_bytes = generate_ma_chart(ticker)
+            photos.append({"filename": f"{ticker}.png", "caption": ticker, "data": img_bytes})
+        except Exception as e:
+            print(f"{ticker} 차트 생성 실패: {e}")
+
+    for i in range(0, len(photos), 10):
+        send_telegram_photo_group(photos[i : i + 10])
+
+    if photos:
+        print(f"차트 {len(photos)}장 발송 완료")
 
 
 if __name__ == "__main__":
