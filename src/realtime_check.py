@@ -33,11 +33,12 @@ def check_fear_greed(state: dict, messages: list):
 
 def check_ticker(ticker: str, state: dict, messages: list):
     snap = get_ticker_snapshot(ticker)
+    is_new_ticker = ticker not in state["tickers"]  # 새로 추가된 종목인지 확인
     t_state = get_ticker_state(state, ticker)
 
     # 1) RSI 30 이하
     rsi_oversold_now = snap["rsi"] <= RSI_OVERSOLD
-    if rsi_oversold_now and not t_state["rsi_oversold_active"]:
+    if rsi_oversold_now and not t_state["rsi_oversold_active"] and not is_new_ticker:
         messages.append(f"🚨 [{ticker}] RSI {snap['rsi']:.1f} - 과매도 구간({RSI_OVERSOLD} 이하) 진입")
     t_state["rsi_oversold_active"] = rsi_oversold_now
 
@@ -48,12 +49,13 @@ def check_ticker(ticker: str, state: dict, messages: list):
         if not info or info["value"] is None:
             continue
         touched_now = snap["close"] <= info["value"]
-        if touched_now and not t_state[key]:
+        if touched_now and not t_state[key] and not is_new_ticker:
             messages.append(
                 f"🚨 [{ticker}] {period}일 이동평균선 터치 "
                 f"(현재가 ${snap['close']:.2f} / {period}일선 ${info['value']:.2f})"
             )
         t_state[key] = touched_now
+
 
 
 def run_realtime_check():
