@@ -1,10 +1,6 @@
 name: Morning Briefing
 
 on:
-  schedule:
-    # [테스트용 임시] 매일 KST 11:00 = UTC 02:00
-    # 정상 작동 확인되면 08:47(UTC 23:47)로 다시 변경 예정
-    - cron: "0 2 * * *"
   workflow_dispatch: {}
 
 jobs:
