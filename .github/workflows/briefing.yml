@@ -2,10 +2,12 @@ name: Morning Briefing
 
 on:
   schedule:
-    # 매일 KST 09:00 = UTC 00:00
-    # 미국 증시 휴장일 여부는 스크립트 내부(is_us_trading_day)에서 판별하여
-    # 휴장일이면 자동으로 메시지를 보내지 않으므로 매일 실행해도 안전합니다.
-    - cron: "5 0 * * *"
+    # 매일 KST 08:47 = UTC 23:47 (전날)
+    # 미국 증시 휴장일 여부는 스크립트 내부(is_kst_weekday)에서 판별하여
+    # 주말이면 자동으로 메시지를 보내지 않으므로 매일 실행해도 안전합니다.
+    # 정시/5분 단위는 GitHub Actions 스케줄 혼잡으로 스킵되기 쉬워
+    # 47분처럼 어중간한 시각으로 설정했습니다.
+    - cron: "47 23 * * *"
   workflow_dispatch: {}
 
 jobs:
