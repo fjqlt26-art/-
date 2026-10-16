@@ -1,5 +1,5 @@
 {
-  "fear_greed_extreme_fear_active": false,
+  "fear_greed_extreme_fear_active": true,
   "tickers": {
     "SPY": {
       "rsi_oversold_active": false,
@@ -8,7 +8,7 @@
     },
     "QQQ": {
       "rsi_oversold_active": false,
-      "ma120_touch_active": false,
+      "ma120_touch_active": true,
       "ma200_touch_active": false
     },
     "SOXQ": {
@@ -28,7 +28,7 @@
     },
     "GDX": {
       "rsi_oversold_active": false,
-      "ma120_touch_active": true,
+      "ma120_touch_active": false,
       "ma200_touch_active": true
     },
     "GLD": {
