@@ -1,9 +1,9 @@
 {
-  "fear_greed_extreme_fear_active": false,
+  "fear_greed_extreme_fear_active": true,
   "tickers": {
     "SPY": {
       "rsi_oversold_active": false,
-      "ma120_touch_active": false,
+      "ma120_touch_active": true,
       "ma200_touch_active": false
     },
     "QQQ": {
@@ -14,12 +14,12 @@
     "SOXQ": {
       "rsi_oversold_active": false,
       "ma120_touch_active": true,
-      "ma200_touch_active": false
+      "ma200_touch_active": true
     },
     "SMH": {
       "rsi_oversold_active": false,
       "ma120_touch_active": true,
-      "ma200_touch_active": false
+      "ma200_touch_active": true
     },
     "GOOGL": {
       "rsi_oversold_active": true,
