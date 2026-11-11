@@ -3,13 +3,13 @@
   "tickers": {
     "SPY": {
       "rsi_oversold_active": false,
-      "ma120_touch_active": true,
+      "ma120_touch_active": false,
       "ma200_touch_active": false
     },
     "QQQ": {
       "rsi_oversold_active": false,
       "ma120_touch_active": true,
-      "ma200_touch_active": true
+      "ma200_touch_active": false
     },
     "SOXQ": {
       "rsi_oversold_active": false,
@@ -28,7 +28,7 @@
     },
     "GDX": {
       "rsi_oversold_active": false,
-      "ma120_touch_active": false,
+      "ma120_touch_active": true,
       "ma200_touch_active": true
     },
     "GLD": {
