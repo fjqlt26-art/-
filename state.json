@@ -3,7 +3,7 @@
   "tickers": {
     "SPY": {
       "rsi_oversold_active": false,
-      "ma120_touch_active": false,
+      "ma120_touch_active": true,
       "ma200_touch_active": false
     },
     "QQQ": {
